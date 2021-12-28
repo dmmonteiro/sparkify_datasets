@@ -6,6 +6,15 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Processes song files in JSON format.
+    Extracts song metadata to store into the songs table.
+    Also extracts artist metadata and loads into the artists table.
+
+    Args:
+        cur (object): a database cursor instance.
+        filepath (str): path to the song file.
+    """
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -26,6 +35,15 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    Processes log files in JSON format.
+    Extracts log metadata and loads into songplays, time, and user tables.
+
+    Args:
+        cur (object): a database cursor instance.
+        filepath (str): path to the log file.
+    """
+
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -76,6 +94,14 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Args:
+        cur (object): a database cursor instance.
+        conn (object): a database connection instance.
+        filepath (str): the path to the file(s) that need to be processed.
+        func (function): the function that will process the file(s).
+    """
+
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -95,6 +121,10 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Creates a connection to the database and processes the files
+    """
+
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
